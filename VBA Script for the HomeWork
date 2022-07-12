@@ -1,1 +1,87 @@
+Sub Tester()
+
+For Each ws In Worksheets
+
+Dim Ticker As String
+
+Dim Total As Double
+
+
+Dim OpenPrice As Double
+Dim ClosePrice As Double
+Dim YearlyChange As Double
+Dim PercentChange As Double
+
+
+Total = 0
+
+Dim SummaryTable As Integer
+SummaryTable = 2
+
+LastRow = ws.Cells(Rows.Count, 1).End(xlUp).Row
+ws.Cells(1, 9).Value = "Ticker"
+ws.Cells(1, 10).Value = "Yearly Change"
+ws.Cells(1, 11).Value = "Percent Change"
+ws.Cells(1, 12).Value = "Total Stock Volume"
+
+
+OpenPrice = 0
+
+For i = 2 To LastRow
+
+
+
+If i = 2 Or (ws.Cells(i - 1, 1).Value <> ws.Cells(i, 1).Value) Then
+
+OpenPrice = ws.Cells(i, 3).Value
+
+End If
+
+If (ws.Cells(i + 1, 1).Value <> ws.Cells(i, 1).Value) Then
+
+Ticker = ws.Cells(i, 1).Value
+Total = Total + ws.Cells(i, 7).Value
+ClosePrice = ws.Cells(i, 6).Value
+YearlyChange = ClosePrice - OpenPrice
+PercentChange = (YearlyChange / OpenPrice)
+
+
+
+ws.Range("I" & SummaryTable).Value = Ticker
+ws.Range("J" & SummaryTable).Value = YearlyChange
+ws.Range("K" & SummaryTable).Value = PercentChange
+
+If (ws.Range("J" & SummaryTable).Value >= 0) Then
+
+ws.Range("J" & SummaryTable).Interior.ColorIndex = 4
+
+Else
+
+ws.Range("J" & SummaryTable).Interior.ColorIndex = 3
+
+End If
+
+ws.Range("K" & SummaryTable).NumberFormat = "0.00%"
+ws.Range("L" & SummaryTable).Value = Total
+
+SummaryTable = SummaryTable + 1
+
+Total = 0
+
+Else
+
+
+Total = Total + ws.Cells(i, 7).Value
+
+
+
+
+
+End If
+
+Next i
+
+Next ws
+
+End Sub
 
